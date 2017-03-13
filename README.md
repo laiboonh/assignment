@@ -40,9 +40,10 @@ scala> Main.run(Array("600dfbe2","5e7b40e1"))
 
 ##Complexity 
 ###Performance of the algorithm, i.e., space and time complexity
-Because of the use of iterators for reading in data file and filtering down to those records that are relevant we can be rest assured that. Having said that it will still be a memory problem if the relevant records are so huge that the heap space runs out. We will then have to consider parallelizing or make use of a separate database storage to assist with this. 
+Because of the use of iterators for reading in data file and filtering down to those records that are relevant we can be rest assured that there will not be OutOfMemoryException. 
+Having said that, there will still be OutOfMemoryException if the relevant records are so huge that the heap space runs out. We will then have to consider parallelizing or make use of a separate database storage to assist with this. 
 
-Its always a balance between processing time and memory usage. We can use more processing time to recalculate information or use memory to save those calculations so that we don't have to recalculate them everytime its needed.
+It's always a balance between processing time and memory usage. We can use more processing time to recalculate information or use memory to save those calculations so that we don't have to recalculate them everytime its needed.
 Caches could be used to 
 - keep records belonging to 1 certain uid so that subsequent calls pertaining to the same uid do not have to look through the whole data file again.
 - keep calculated position of subjects at a certain time on a certain floor 
