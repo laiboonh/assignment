@@ -1,11 +1,11 @@
-#Assignment
+# Assignment
 This is an interesting programming assignment whereby one is to decide whether a pair of subjects "meet" given some location data.
 
-##System requirements
+## System requirements
 - Scala version 2.12.1
 - Java 8
 
-##Usage
+## Usage
 1. Clone this directory
 2. Put data file in `src/main/resources` folder
 3. Run program using `sbt`
@@ -21,25 +21,25 @@ scala> Main.main(Array("600dfbe2","5e7b40e1"))
 ...
 ```
 
-##Definitions & Assumptions
-####What i assume to be "meet"
+## Definitions & Assumptions
+#### What i assume to be "meet"
 - The two subjects must be on the same floor in the same timespace i.e their timeline overlap
 - The two subjects must be within 1 unit of x and y.
 - Assuming the subjects are humans, i assume that their position won't change by much over a time window of 1 second (1000ms). This can be adjusted if the output is too verbose.
 
-##Considerations
+## Considerations
 - I am using Scala 2.12.1 because of the convenience of `io.Source.fromResource`
 - Adhere to a functional style of programming so that complex tasks can be broken down to several smaller functions and each of them can be coded and tested separately.
 - We cannot trust that the data file will be of the correct format when given another set of supposedly data from the same source
 - Timestamp format is in UTC time. I will set joda time default DateTimeZone to UTC time and only deal with UTC time throughout this assignment so that there will be no ambiguity with regards to time zone.
 
-##Chain of Thought
+## Chain of Thought
 - I need a component to read in the csv file and return an Iterator of case objects holding the data `CsvDataReader`
 - I need a component to help filter down all the data to those that belongs to the 2 subjects in question `DataAccumulator`
 - I need a component to process that relevant data and give a final result `DataProcessor`
 
-##Complexity 
-###Performance of the algorithm, i.e., space and time complexity
+## Complexity 
+### Performance of the algorithm, i.e., space and time complexity
 Because of the use of iterators for reading in data file and filtering down to those records that are relevant we can be rest assured that there will not be OutOfMemoryException. 
 Having said that, there will still be OutOfMemoryException if the relevant records are so huge that the heap space runs out. We will then have to consider parallelizing or make use of a separate database storage to assist with this. 
 
@@ -48,8 +48,8 @@ Caches could be used to
 - keep records belonging to 1 certain uid so that subsequent calls pertaining to the same uid do not have to look through the whole data file again.
 - keep calculated position of subjects at a certain time on a certain floor 
 
-##Future Work
-###Room for Improvement
+## Future Work
+### Room for Improvement
 - Generalise the solution so that it works for multiple subjects instead of just two
 - Create more case classes in replacement of the (bad) excessive use of Tuples for better code readability
 - Lacking in integration tests, unit tets are not complete nor exhaustive
