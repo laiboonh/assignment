@@ -72,24 +72,24 @@ case class ActualDataProcessor(data: Tuple2[Map[Byte, List[Position]], Map[Byte,
     subject1Interval.overlap(subject2Interval)
   }
 
-  def positionDuring(epoc:Long, intervalXYList:List[IntervalXY]):Tuple2[Double,Double] = {
+  def positionDuring(epochWhen:Long, intervalXYList:List[IntervalXY]):Tuple2[Double,Double] = {
     val intervalXYOpt = intervalXYList.find(intervalXY => {
       //i want to include the end point as well, joda excludes it by default
       val intervalEnd:Long = intervalXY.interval.getEndMillis + 1
       val intervalStart:Long = intervalXY.interval.getStartMillis
       val newInterval = new Interval(intervalStart, intervalEnd)
-      newInterval.contains(epoc)
+      newInterval.contains(epochWhen)
     })
     assert(intervalXYOpt.isDefined, "IntervalXY at this stage shouldn't be None")
     val intervalXY = intervalXYOpt.get
-    val xInterpolated = interpolate(epoc, intervalXY.interval.getStartMillis, intervalXY.interval.getEndMillis, intervalXY.startX, intervalXY.endX)
-    val yInterpolated = interpolate(epoc, intervalXY.interval.getStartMillis, intervalXY.interval.getEndMillis, intervalXY.startY, intervalXY.endY)
+    val xInterpolated = interpolate(epochWhen, intervalXY.interval.getStartMillis, intervalXY.interval.getEndMillis, intervalXY.startX, intervalXY.endX)
+    val yInterpolated = interpolate(epochWhen, intervalXY.interval.getStartMillis, intervalXY.interval.getEndMillis, intervalXY.startY, intervalXY.endY)
     (xInterpolated, yInterpolated)
   }
 
-  def interpolate(epochWhen:Long, epoch1:Long, epoch2:Long, value1:Double, value2:Double): Double = {
-    assert(epochWhen <= epoch2 && epochWhen >= epoch1, "epochWhen should be between epoch1 and epoch2")
-    value1+(epochWhen-epoch1)*((value2-value1)/(epoch2-epoch1))
+  def interpolate(epochWhen:Long, epochStart:Long, epochEnd:Long, position1:Double, position2:Double): Double = {
+    assert(epochWhen <= epochEnd && epochWhen >= epochStart, "epochWhen should be between epoch1 and epoch2")
+    position1+(epochWhen-epochStart)*((position2-position1)/(epochEnd-epochStart))
   }
 
 }
