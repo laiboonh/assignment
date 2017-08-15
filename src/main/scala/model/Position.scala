@@ -8,8 +8,6 @@ case class Position(timestamp: DateTime, x:Float, y:Double, floor:Byte, uid:Stri
 
 case object Position {
 
-  type Floor = Byte
-
   def apply(string:String):Option[Position] =
     string.split(',') match {
       case Array(timestamp, x, y, floor, uid) =>

@@ -3,20 +3,22 @@ package service
 import model.Position
 
 trait DataAccumulator[A] {
-  def accumulate(iterator: Iterator[A], subject1Uid: String, subject2Uid: String): Tuple2[Map[Byte, List[Position]], Map[Byte, List[Position]]]
+  type Floor = Byte
+  type FloorPositions = Map[Floor, List[Position]]
+  def emptyFloorPositions:FloorPositions = Map()
+  def accumulate(iterator: Iterator[A], subject1Uid: String, subject2Uid: String): (FloorPositions, FloorPositions)
 }
 
 class ActualDataAccumulator extends DataAccumulator[Position] {
-  override def accumulate(iterator: Iterator[Position], subject1Uid: String, subject2Uid: String): (Map[Byte, List[Position]], Map[Byte, List[Position]]) = {
-    iterator.foldRight((Map.empty[Byte, List[Position]], Map.empty[Byte, List[Position]])){ (position, accumulator) =>
-      val floor = position.floor
-      position.uid match {
-        case `subject1Uid` =>
+  override def accumulate(iterator: Iterator[Position], subject1Uid: String, subject2Uid: String): (FloorPositions, FloorPositions) = {
+    iterator.foldRight((emptyFloorPositions, emptyFloorPositions)){ (position, accumulator) =>
+      position match {
+        case Position(_, _, _, floor, `subject1Uid`) =>
           val oldMap = accumulator._1
           val newList:List[Position] = oldMap.getOrElse(floor,List.empty[Position]) :+ position
           val newMap = oldMap + (floor -> newList)
           (newMap, accumulator._2)
-        case `subject2Uid` =>
+        case Position(_, _, _, floor, `subject2Uid`) =>
           val newList:List[Position] = accumulator._2.getOrElse(floor,List.empty[Position]) :+ position
           val newMap = accumulator._2 + (floor -> newList)
           (accumulator._1, newMap)

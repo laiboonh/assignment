@@ -14,9 +14,9 @@ class ActualDataAccumulatorSpec extends WordSpec with Matchers {
   private val subject2 = "5e7b40e1"
   private val iterator = Iterator(position1, position2, position3, position4)
 
-  "An ActualDataAccumulator" when {
+  "accumulate" when {
     "running through a list of positions" should {
-      "accumulate and build up a Map" in {
+      "build up a Map of floor positions" in {
         val positionByFloorTup = accumulator.accumulate(iterator,subject1,subject2)
         positionByFloorTup._1.keys should have size 2
         positionByFloorTup._1.get(1.toByte).get should have size 1

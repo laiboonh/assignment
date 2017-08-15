@@ -1,4 +1,4 @@
-import model.Position
+import model.{OutputObject, Position}
 import org.joda.time.{DateTime, DateTimeZone}
 import service.{ActualDataAccumulator, ActualDataProcessor, CsvDataReader}
 
@@ -16,10 +16,10 @@ object Main {
     val dataAccumulator = new ActualDataAccumulator
     val subjectsPositionDataByFloor: (Map[Byte, List[Position]], Map[Byte, List[Position]]) = dataAccumulator.accumulate(positionDataIterator, args(0), args(1))
     val dataProcessor = new ActualDataProcessor(subjectsPositionDataByFloor)
-    val result: Iterable[(Byte, Long, Double, Double, Double, Double)] = dataProcessor.meetingTimeAndPosition
+    val result: Iterable[OutputObject] = dataProcessor.meetingTimeAndPosition
 
     result.foreach {
-      res => println(s"${args(0)} and ${args(1)} meet on floor: ${res._1}, time: ${new DateTime(res._2)}, position: (${res._3}, ${res._4}) & position: (${res._5}, ${res._6})")
+      res => println(s"${args(0)} and ${args(1)} meet on floor: ${res.floor}, time: ${new DateTime(res.time)}, position: (${res.subject1X}, ${res.subject1Y}) & position: (${res.subject2X}, ${res.subject2Y})")
     }
 
   }

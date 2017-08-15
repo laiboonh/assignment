@@ -29,7 +29,7 @@ class ActualDataProcessorSpec extends WordSpec with Matchers {
   "convertToIntervalXY" when {
     "given a list of positions" should {
       "convert them to a list of IntervalXYs depicting how the positions changed overtime" in {
-        dataProcessor.convertToIntervalXY(List(position2, position3, position5)) ===
+        dataProcessor.convertToPathway(List(position2, position3, position5)) ===
           List(
             IntervalXY(new Interval(utc5, utc2), position5.x, position5.y, position2.x, position2.y),
             IntervalXY(new Interval(utc2, utc3), position2.x, position2.y, position3.x, position3.y)
